@@ -28,11 +28,11 @@ function indent() {
 }
 
 # parse and derive params
-BUILD_DIR=$1
-TERRAFORM_DIR=$BUILD_DIR/vendor/terraform
-PROFILED_DIR=$BUILD_DIR/.profile.d
+BUILD_DIR="${1}"
+TERRAFORM_DIR="${BUILD_DIR}/vendor/terraform"
+PROFILED_DIR="${BUILD_DIR}/.profile.d"
 
-terraform_bin="$TERRAFORM_DIR/bin/terraform"
+TERRAFORM_BIN="${TERRAFORM_DIR}/bin/terraform"
 
 if [[ -n ${TERRAFORM_BIN_URL:-} ]]; then
 	echo 'Using $TERRAFORM_BIN_URL from ENV VAR for installation' | indent
@@ -42,11 +42,11 @@ fi
 
 topic "Installing Terraform from ${TERRAFORM_BIN_URL}"
 curl -s -L "${TERRAFORM_BIN_URL}" > "terraform-bin.zip"
-mkdir -p "$TERRAFORM_DIR/bin"
-unzip -p "terraform-bin.zip" > "$terraform_bin"
-chmod +x "$terraform_bin"
+mkdir -p "${TERRAFORM_DIR}/bin"
+unzip -p "terraform-bin.zip" > "${TERRAFORM_BIN}"
+chmod +x "${TERRAFORM_BIN}"
 rm "terraform-bin.zip"
 
 echo 'Setting up $PATH' | indent
-mkdir -p $PROFILED_DIR
-echo 'PATH=$PATH:$HOME/vendor/terraform/bin' > $PROFILED_DIR/terraform.sh
+mkdir -p "${PROFILED_DIR}"
+echo 'PATH=$PATH:$HOME/vendor/terraform/bin' > "${PROFILED_DIR}/terraform.sh"
