@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/compile <build-dir>
+# bin/compile <build-dir> <cache-dir> <env-dir>
 
 # Fail immediately on non-zero exit code.
 set -e
@@ -10,25 +10,20 @@ set -u
 # Debug, echo every command
 #set -x
 
-function error() {
-  echo " !     $*" >&2
-  exit 1
-}
-
-function topic() {
-  echo "-----> $*"
-}
-
-function indent() {
-  c='s/^/       /'
-  case $(uname) in
-    Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-  esac
-}
-
 # parse and derive params
 BUILD_DIR="${1}"
+CACHE_DIR="${2}"
+ENV_DIR="${3}"
+BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
+
+# source in common functions
+. "${BIN_DIR}/common.sh"
+
+export_env_dir "${ENV_DIR}"
+
+#create the cache dir if it doesn't exist
+mkdir -p "${CACHE_DIR}"
+
 TERRAFORM_DIR="${BUILD_DIR}/vendor/terraform"
 PROFILED_DIR="${BUILD_DIR}/.profile.d"
 
